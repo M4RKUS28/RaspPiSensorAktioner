@@ -49,6 +49,9 @@ CMakeLists.txt.user*
 
 release/*
 debug/*
+ui_*
+Makefile*
+
 
 # QtCreator 4.8< compilation database 
 compile_commands.json
