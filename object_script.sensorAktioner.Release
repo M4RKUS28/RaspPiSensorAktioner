@@ -1,0 +1,13 @@
+release/aktionmngr.o
+release/aktionselektdialog.o
+release/main.o
+release/mainwindow.o
+release/mytypes.o
+release/pimanager.o
+release/storagemngr.o
+release/windowmanager.o
+release/my_tcp_lib.o
+release/moc_aktionmngr.o
+release/moc_aktionselektdialog.o
+release/moc_mainwindow.o
+release/moc_pimanager.o

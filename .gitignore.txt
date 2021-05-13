@@ -1,6 +1,0 @@
-release/*
-debug/*
-.qmake*
-Makefile*
-*Debug
-*Release
