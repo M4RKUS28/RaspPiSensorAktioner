@@ -68,9 +68,11 @@ QPoint WindowManager::getGlobalMousePos( )
 
 int WindowManager::hideWindow( QString wname )
 {
-    HWND window = ::FindWindowA(0, wname.toStdString().c_str() );
+
+
+    HWND window = ::FindWindowW(NULL, wname.toStdWString().c_str() );
     if(! window ) {
-        std::cout << "No windows found" << std::endl;
+        std::cout << "No windows found: " << wname.toStdString() << std::endl;
         return 1;
     } else if(/* ! SetWindowPos (window, HWND_TOP, 0, 0, 0, 0, SWP_HIDEWINDOW  //hide window
                                                             | SWP_NOMOVE // ignore x,y
@@ -89,7 +91,7 @@ int WindowManager::hideWindow( QString wname )
 int WindowManager::showWindow(QString wname)
 {
 
-    HWND window = ::FindWindowA(0, wname.toStdString().c_str() );
+    HWND window = ::FindWindowW(NULL, wname.toStdWString().c_str() );
     if(! window ) {
         std::cout << "No windows found" << std::endl;
         return 1;
@@ -160,7 +162,8 @@ QString WindowManager::getWindowNameFromList(AKTION::WINDOW_NAME_PARITY wp, QStr
 
     auto list = getWindowList();
     for ( const auto& title : qAsConst(list) ) {
-      //  std::cout << title.toStdString() << "..." << std::endl;
+       // if(title.length() > 18)
+       //     std::cout << title.toStdString() << "... ends with ? '" << name.toStdString() << "' ??" << std::endl;
         if( ( wp == AKTION::WINDOW_NAME_PARITY::EXACTLY     &&  title == name            ) ||
             ( wp == AKTION::WINDOW_NAME_PARITY::CONTAINS    &&  title.contains( name   ) ) ||
             ( wp == AKTION::WINDOW_NAME_PARITY::BEGINS_WITH &&  title.startsWith( name ) ) ||

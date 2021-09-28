@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
         ui->pushButton->setDisabled(true);
 
     QList<AKTIONMNGR_DATA> aML = storgMngr->getInitDataList();
-    for( const auto &aM : aML) {
+    for( const auto &aM : qAsConst(aML)) {
         if( aM.id == "") {
             std::cout << "Überrpringen ungültigen Eintrag" << std::endl;
             continue;
@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
             //add item to list
             this->aktionMngrList.insert(aktionMngrList.begin() + index, newAktionMngr);
 
+        //connect object
+        connect(newAktionMngr, SIGNAL(wandCreateMsgBox(int, QString, QString)), this, SLOT(createMessageBox(int, QString, QString)));
         //Start thread
         newAktionMngr->mThread->start();
     }
@@ -255,6 +257,9 @@ void MainWindow::on_pushButton_add_aktionMngr_clicked()
     //save settings....
     storgMngr->reStoreAll(this->getAktMngrDataList());
 
+    //connect object
+    connect(newAktionMngr, SIGNAL(wandCreateMsgBox(int, QString, QString)), this, SLOT(createMessageBox(int, QString, QString)));
+
     //Start thread
     newAktionMngr->mThread->start();
 
@@ -308,5 +313,29 @@ void MainWindow::on_pushButton_clicked()
 {
     if( piMngr->connect() == 0)
         ui->pushButton->setDisabled(true);
+
+}
+
+void MainWindow::createMessageBox(int type, QString title, QString msg)
+{
+    if(type == MSG_TYPE::warning)
+        QMessageBox::warning(this, title, msg);
+
+    else if (type == MSG_TYPE::critical)
+        QMessageBox::critical(this, title, msg);
+
+    else // (type == MSG_TYPE::information )
+        QMessageBox::information(this, title, msg);
+
+}
+
+
+void MainWindow::createMessageBoxError(QString msg)
+{
+
+}
+
+void MainWindow::createMessageBoxWarning(QString msg)
+{
 
 }

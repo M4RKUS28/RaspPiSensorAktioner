@@ -4,6 +4,8 @@
 #include "aktionmngr.h"
 #include "storagemngr.h"
 #include "pimanager.h"
+#include <QMessageBox>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,6 +42,13 @@ private slots:
     void on_pushButton_disable_clicked();
 
     void on_pushButton_clicked();
+
+
+    void createMessageBox(int type, QString title, QString msg);
+    void createMessageBoxError(QString msg);
+    void createMessageBoxWarning(QString msg);
+
+
 
 private:
     Ui::MainWindow *ui;

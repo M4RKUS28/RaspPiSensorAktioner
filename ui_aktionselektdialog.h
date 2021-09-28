@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'aktionselektdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.0
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,7 +10,6 @@
 #define UI_AKTIONSELEKTDIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAbstractButton>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
@@ -40,14 +39,27 @@ public:
     QWidget *page_1_Sleep;
     QFormLayout *formLayout;
     QLabel *label_3;
+    QLabel *label_14;
+    QSpinBox *spinBox;
     QLabel *label_2;
-    QLabel *label_4;
     QSpinBox *spinBox_sleep_time_sekunden;
+    QLabel *label_4;
     QSpinBox *spinBox_sleep_time_minuten;
+    QSpacerItem *verticalSpacer_2;
     QWidget *page_2_show_msg;
     QFormLayout *formLayout_3;
     QLabel *label;
     QLineEdit *lineEdit_sendMessage_messag;
+    QLabel *label_fenstertitel;
+    QLineEdit *lineEdit_fenstertitel;
+    QGroupBox *groupBox_3;
+    QGridLayout *gridLayout_5;
+    QRadioButton *radioButton_info;
+    QRadioButton *radioButton_warn;
+    QRadioButton *radioButton_error;
+    QLabel *label_10;
+    QLabel *label_13;
+    QComboBox *comboBox;
     QWidget *page_3_run_command;
     QFormLayout *formLayout_2;
     QLabel *label_5;
@@ -186,44 +198,64 @@ public:
         formLayout->setObjectName(QString::fromUtf8("formLayout"));
         label_3 = new QLabel(page_1_Sleep);
         label_3->setObjectName(QString::fromUtf8("label_3"));
+        QSizePolicy sizePolicy1(QSizePolicy::Maximum, QSizePolicy::Maximum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
+        label_3->setSizePolicy(sizePolicy1);
 
         formLayout->setWidget(0, QFormLayout::LabelRole, label_3);
 
+        label_14 = new QLabel(page_1_Sleep);
+        label_14->setObjectName(QString::fromUtf8("label_14"));
+
+        formLayout->setWidget(1, QFormLayout::LabelRole, label_14);
+
+        spinBox = new QSpinBox(page_1_Sleep);
+        spinBox->setObjectName(QString::fromUtf8("spinBox"));
+        spinBox->setMaximum(999);
+
+        formLayout->setWidget(1, QFormLayout::FieldRole, spinBox);
+
         label_2 = new QLabel(page_1_Sleep);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
-        label_2->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
+        label_2->setSizePolicy(sizePolicy2);
 
-        formLayout->setWidget(1, QFormLayout::LabelRole, label_2);
-
-        label_4 = new QLabel(page_1_Sleep);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-        sizePolicy1.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
-        label_4->setSizePolicy(sizePolicy1);
-
-        formLayout->setWidget(2, QFormLayout::LabelRole, label_4);
+        formLayout->setWidget(2, QFormLayout::LabelRole, label_2);
 
         spinBox_sleep_time_sekunden = new QSpinBox(page_1_Sleep);
         spinBox_sleep_time_sekunden->setObjectName(QString::fromUtf8("spinBox_sleep_time_sekunden"));
-        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(spinBox_sleep_time_sekunden->sizePolicy().hasHeightForWidth());
-        spinBox_sleep_time_sekunden->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(spinBox_sleep_time_sekunden->sizePolicy().hasHeightForWidth());
+        spinBox_sleep_time_sekunden->setSizePolicy(sizePolicy3);
         spinBox_sleep_time_sekunden->setMaximum(59);
         spinBox_sleep_time_sekunden->setValue(10);
 
-        formLayout->setWidget(1, QFormLayout::FieldRole, spinBox_sleep_time_sekunden);
+        formLayout->setWidget(2, QFormLayout::FieldRole, spinBox_sleep_time_sekunden);
+
+        label_4 = new QLabel(page_1_Sleep);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        sizePolicy2.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
+        label_4->setSizePolicy(sizePolicy2);
+
+        formLayout->setWidget(3, QFormLayout::LabelRole, label_4);
 
         spinBox_sleep_time_minuten = new QSpinBox(page_1_Sleep);
         spinBox_sleep_time_minuten->setObjectName(QString::fromUtf8("spinBox_sleep_time_minuten"));
-        sizePolicy2.setHeightForWidth(spinBox_sleep_time_minuten->sizePolicy().hasHeightForWidth());
-        spinBox_sleep_time_minuten->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(spinBox_sleep_time_minuten->sizePolicy().hasHeightForWidth());
+        spinBox_sleep_time_minuten->setSizePolicy(sizePolicy3);
 
-        formLayout->setWidget(2, QFormLayout::FieldRole, spinBox_sleep_time_minuten);
+        formLayout->setWidget(3, QFormLayout::FieldRole, spinBox_sleep_time_minuten);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        formLayout->setItem(4, QFormLayout::LabelRole, verticalSpacer_2);
 
         stackedWidget->addWidget(page_1_Sleep);
         page_2_show_msg = new QWidget();
@@ -233,12 +265,63 @@ public:
         label = new QLabel(page_2_show_msg);
         label->setObjectName(QString::fromUtf8("label"));
 
-        formLayout_3->setWidget(0, QFormLayout::LabelRole, label);
+        formLayout_3->setWidget(1, QFormLayout::LabelRole, label);
 
         lineEdit_sendMessage_messag = new QLineEdit(page_2_show_msg);
         lineEdit_sendMessage_messag->setObjectName(QString::fromUtf8("lineEdit_sendMessage_messag"));
 
-        formLayout_3->setWidget(0, QFormLayout::FieldRole, lineEdit_sendMessage_messag);
+        formLayout_3->setWidget(1, QFormLayout::FieldRole, lineEdit_sendMessage_messag);
+
+        label_fenstertitel = new QLabel(page_2_show_msg);
+        label_fenstertitel->setObjectName(QString::fromUtf8("label_fenstertitel"));
+
+        formLayout_3->setWidget(0, QFormLayout::LabelRole, label_fenstertitel);
+
+        lineEdit_fenstertitel = new QLineEdit(page_2_show_msg);
+        lineEdit_fenstertitel->setObjectName(QString::fromUtf8("lineEdit_fenstertitel"));
+
+        formLayout_3->setWidget(0, QFormLayout::FieldRole, lineEdit_fenstertitel);
+
+        groupBox_3 = new QGroupBox(page_2_show_msg);
+        groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
+        gridLayout_5 = new QGridLayout(groupBox_3);
+        gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
+        radioButton_info = new QRadioButton(groupBox_3);
+        radioButton_info->setObjectName(QString::fromUtf8("radioButton_info"));
+        radioButton_info->setChecked(true);
+
+        gridLayout_5->addWidget(radioButton_info, 0, 0, 1, 1);
+
+        radioButton_warn = new QRadioButton(groupBox_3);
+        radioButton_warn->setObjectName(QString::fromUtf8("radioButton_warn"));
+
+        gridLayout_5->addWidget(radioButton_warn, 0, 1, 1, 1);
+
+        radioButton_error = new QRadioButton(groupBox_3);
+        radioButton_error->setObjectName(QString::fromUtf8("radioButton_error"));
+
+        gridLayout_5->addWidget(radioButton_error, 0, 2, 1, 1);
+
+
+        formLayout_3->setWidget(2, QFormLayout::FieldRole, groupBox_3);
+
+        label_10 = new QLabel(page_2_show_msg);
+        label_10->setObjectName(QString::fromUtf8("label_10"));
+
+        formLayout_3->setWidget(2, QFormLayout::LabelRole, label_10);
+
+        label_13 = new QLabel(page_2_show_msg);
+        label_13->setObjectName(QString::fromUtf8("label_13"));
+
+        formLayout_3->setWidget(3, QFormLayout::LabelRole, label_13);
+
+        comboBox = new QComboBox(page_2_show_msg);
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->setObjectName(QString::fromUtf8("comboBox"));
+
+        formLayout_3->setWidget(3, QFormLayout::FieldRole, comboBox);
 
         stackedWidget->addWidget(page_2_show_msg);
         page_3_run_command = new QWidget();
@@ -372,8 +455,8 @@ public:
 
         radioButton_recheck_stop_programm = new QRadioButton(page_6_re_check_condition_again);
         radioButton_recheck_stop_programm->setObjectName(QString::fromUtf8("radioButton_recheck_stop_programm"));
-        sizePolicy2.setHeightForWidth(radioButton_recheck_stop_programm->sizePolicy().hasHeightForWidth());
-        radioButton_recheck_stop_programm->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(radioButton_recheck_stop_programm->sizePolicy().hasHeightForWidth());
+        radioButton_recheck_stop_programm->setSizePolicy(sizePolicy3);
 
         formLayout_5->setWidget(2, QFormLayout::FieldRole, radioButton_recheck_stop_programm);
 
@@ -387,11 +470,11 @@ public:
         stackedWidget->addWidget(page_6_re_check_condition_again);
         page_7__fenster_bewegen = new QWidget();
         page_7__fenster_bewegen->setObjectName(QString::fromUtf8("page_7__fenster_bewegen"));
-        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Preferred);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(page_7__fenster_bewegen->sizePolicy().hasHeightForWidth());
-        page_7__fenster_bewegen->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy4(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(page_7__fenster_bewegen->sizePolicy().hasHeightForWidth());
+        page_7__fenster_bewegen->setSizePolicy(sizePolicy4);
         formLayout_7 = new QFormLayout(page_7__fenster_bewegen);
         formLayout_7->setObjectName(QString::fromUtf8("formLayout_7"));
         label_11 = new QLabel(page_7__fenster_bewegen);
@@ -399,6 +482,7 @@ public:
         QFont font;
         font.setPointSize(9);
         font.setBold(true);
+        font.setWeight(75);
         label_11->setFont(font);
 
         formLayout_7->setWidget(0, QFormLayout::LabelRole, label_11);
@@ -423,6 +507,7 @@ public:
         QFont font1;
         font1.setPointSize(8);
         font1.setBold(false);
+        font1.setWeight(50);
         comboBox_move_window_window_parity->setFont(font1);
 
         formLayout_7->setWidget(1, QFormLayout::FieldRole, comboBox_move_window_window_parity);
@@ -474,11 +559,11 @@ public:
 
         label_14_bildschirm = new QLabel(page_7__fenster_bewegen);
         label_14_bildschirm->setObjectName(QString::fromUtf8("label_14_bildschirm"));
-        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(label_14_bildschirm->sizePolicy().hasHeightForWidth());
-        label_14_bildschirm->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy5(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(label_14_bildschirm->sizePolicy().hasHeightForWidth());
+        label_14_bildschirm->setSizePolicy(sizePolicy5);
         label_14_bildschirm->setMinimumSize(QSize(100, 0));
         label_14_bildschirm->setFont(font);
 
@@ -487,8 +572,8 @@ public:
         spinBox_Bildschirm = new QSpinBox(page_7__fenster_bewegen);
         spinBox_Bildschirm->setObjectName(QString::fromUtf8("spinBox_Bildschirm"));
         spinBox_Bildschirm->setEnabled(true);
-        sizePolicy2.setHeightForWidth(spinBox_Bildschirm->sizePolicy().hasHeightForWidth());
-        spinBox_Bildschirm->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(spinBox_Bildschirm->sizePolicy().hasHeightForWidth());
+        spinBox_Bildschirm->setSizePolicy(sizePolicy3);
         spinBox_Bildschirm->setMinimumSize(QSize(0, 0));
         spinBox_Bildschirm->setMaximumSize(QSize(16777215, 16777215));
         spinBox_Bildschirm->setMinimum(1);
@@ -497,8 +582,8 @@ public:
 
         label_10_bewegennach = new QLabel(page_7__fenster_bewegen);
         label_10_bewegennach->setObjectName(QString::fromUtf8("label_10_bewegennach"));
-        sizePolicy4.setHeightForWidth(label_10_bewegennach->sizePolicy().hasHeightForWidth());
-        label_10_bewegennach->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_10_bewegennach->sizePolicy().hasHeightForWidth());
+        label_10_bewegennach->setSizePolicy(sizePolicy5);
         label_10_bewegennach->setMinimumSize(QSize(100, 0));
         label_10_bewegennach->setFont(font);
 
@@ -510,11 +595,11 @@ public:
         gridLayout_2->setSizeConstraint(QLayout::SetDefaultConstraint);
         groupBox_newPosY = new QGroupBox(page_7__fenster_bewegen);
         groupBox_newPosY->setObjectName(QString::fromUtf8("groupBox_newPosY"));
-        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Maximum);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(groupBox_newPosY->sizePolicy().hasHeightForWidth());
-        groupBox_newPosY->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy6(QSizePolicy::Preferred, QSizePolicy::Maximum);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(groupBox_newPosY->sizePolicy().hasHeightForWidth());
+        groupBox_newPosY->setSizePolicy(sizePolicy6);
         verticalLayout_2 = new QVBoxLayout(groupBox_newPosY);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         formLayout_10 = new QFormLayout();
@@ -547,11 +632,11 @@ public:
 
         spinBox_move_window_pos_Y = new QSpinBox(groupBox_newPosY);
         spinBox_move_window_pos_Y->setObjectName(QString::fromUtf8("spinBox_move_window_pos_Y"));
-        QSizePolicy sizePolicy6(QSizePolicy::Minimum, QSizePolicy::Maximum);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(spinBox_move_window_pos_Y->sizePolicy().hasHeightForWidth());
-        spinBox_move_window_pos_Y->setSizePolicy(sizePolicy6);
+        QSizePolicy sizePolicy7(QSizePolicy::Minimum, QSizePolicy::Maximum);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(spinBox_move_window_pos_Y->sizePolicy().hasHeightForWidth());
+        spinBox_move_window_pos_Y->setSizePolicy(sizePolicy7);
         spinBox_move_window_pos_Y->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
         spinBox_move_window_pos_Y->setMinimum(-9999);
         spinBox_move_window_pos_Y->setMaximum(99999);
@@ -573,8 +658,8 @@ public:
 
         groupBox_newPosX = new QGroupBox(page_7__fenster_bewegen);
         groupBox_newPosX->setObjectName(QString::fromUtf8("groupBox_newPosX"));
-        sizePolicy5.setHeightForWidth(groupBox_newPosX->sizePolicy().hasHeightForWidth());
-        groupBox_newPosX->setSizePolicy(sizePolicy5);
+        sizePolicy6.setHeightForWidth(groupBox_newPosX->sizePolicy().hasHeightForWidth());
+        groupBox_newPosX->setSizePolicy(sizePolicy6);
         verticalLayout = new QVBoxLayout(groupBox_newPosX);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         formLayout_9 = new QFormLayout();
@@ -609,8 +694,8 @@ public:
 
         spinBox_movewindow_pos_X = new QSpinBox(groupBox_newPosX);
         spinBox_movewindow_pos_X->setObjectName(QString::fromUtf8("spinBox_movewindow_pos_X"));
-        sizePolicy6.setHeightForWidth(spinBox_movewindow_pos_X->sizePolicy().hasHeightForWidth());
-        spinBox_movewindow_pos_X->setSizePolicy(sizePolicy6);
+        sizePolicy7.setHeightForWidth(spinBox_movewindow_pos_X->sizePolicy().hasHeightForWidth());
+        spinBox_movewindow_pos_X->setSizePolicy(sizePolicy7);
         spinBox_movewindow_pos_X->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         spinBox_movewindow_pos_X->setMinimum(-9999);
         spinBox_movewindow_pos_X->setMaximum(99999);
@@ -635,8 +720,8 @@ public:
 
         label_13_newSize = new QLabel(page_7__fenster_bewegen);
         label_13_newSize->setObjectName(QString::fromUtf8("label_13_newSize"));
-        sizePolicy4.setHeightForWidth(label_13_newSize->sizePolicy().hasHeightForWidth());
-        label_13_newSize->setSizePolicy(sizePolicy4);
+        sizePolicy5.setHeightForWidth(label_13_newSize->sizePolicy().hasHeightForWidth());
+        label_13_newSize->setSizePolicy(sizePolicy5);
         label_13_newSize->setMinimumSize(QSize(100, 0));
         label_13_newSize->setFont(font);
 
@@ -646,8 +731,8 @@ public:
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         groupBox_new_size_width = new QGroupBox(page_7__fenster_bewegen);
         groupBox_new_size_width->setObjectName(QString::fromUtf8("groupBox_new_size_width"));
-        sizePolicy5.setHeightForWidth(groupBox_new_size_width->sizePolicy().hasHeightForWidth());
-        groupBox_new_size_width->setSizePolicy(sizePolicy5);
+        sizePolicy6.setHeightForWidth(groupBox_new_size_width->sizePolicy().hasHeightForWidth());
+        groupBox_new_size_width->setSizePolicy(sizePolicy6);
         verticalLayout_11 = new QVBoxLayout(groupBox_new_size_width);
         verticalLayout_11->setObjectName(QString::fromUtf8("verticalLayout_11"));
         formLayout_8 = new QFormLayout();
@@ -699,8 +784,8 @@ public:
 
         groupBox_new_size_height = new QGroupBox(page_7__fenster_bewegen);
         groupBox_new_size_height->setObjectName(QString::fromUtf8("groupBox_new_size_height"));
-        sizePolicy5.setHeightForWidth(groupBox_new_size_height->sizePolicy().hasHeightForWidth());
-        groupBox_new_size_height->setSizePolicy(sizePolicy5);
+        sizePolicy6.setHeightForWidth(groupBox_new_size_height->sizePolicy().hasHeightForWidth());
+        groupBox_new_size_height->setSizePolicy(sizePolicy6);
         verticalLayout_12 = new QVBoxLayout(groupBox_new_size_height);
         verticalLayout_12->setObjectName(QString::fromUtf8("verticalLayout_12"));
         formLayout_11 = new QFormLayout();
@@ -768,8 +853,8 @@ public:
 
         groupBox_2 = new QGroupBox(AktionSelektDialog);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        sizePolicy1.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
-        groupBox_2->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
+        groupBox_2->setSizePolicy(sizePolicy2);
         groupBox_2->setMaximumSize(QSize(16777215, 1));
 
         gridLayout_4->addWidget(groupBox_2, 2, 0, 1, 1);
@@ -783,10 +868,10 @@ public:
 
 
         retranslateUi(AktionSelektDialog);
-        QObject::connect(buttonBox, &QDialogButtonBox::accepted, AktionSelektDialog, &QDialog::accept);
-        QObject::connect(buttonBox, &QDialogButtonBox::rejected, AktionSelektDialog, &QDialog::reject);
+        QObject::connect(buttonBox, SIGNAL(accepted()), AktionSelektDialog, SLOT(accept()));
+        QObject::connect(buttonBox, SIGNAL(rejected()), AktionSelektDialog, SLOT(reject()));
 
-        stackedWidget->setCurrentIndex(4);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(AktionSelektDialog);
@@ -807,9 +892,21 @@ public:
         comboBox_select_Aktion->setItemText(9, QCoreApplication::translate("AktionSelektDialog", "Computer Herunterfahren / Neustarten", nullptr));
 
         label_3->setText(QCoreApplication::translate("AktionSelektDialog", "Dauer:", nullptr));
+        label_14->setText(QCoreApplication::translate("AktionSelektDialog", "Milli Sekunden:", nullptr));
         label_2->setText(QCoreApplication::translate("AktionSelektDialog", "Sekunden:", nullptr));
         label_4->setText(QCoreApplication::translate("AktionSelektDialog", "Minuten:", nullptr));
         label->setText(QCoreApplication::translate("AktionSelektDialog", "Nachricht:", nullptr));
+        label_fenstertitel->setText(QCoreApplication::translate("AktionSelektDialog", "Fenster Titel", nullptr));
+        groupBox_3->setTitle(QString());
+        radioButton_info->setText(QCoreApplication::translate("AktionSelektDialog", "Information", nullptr));
+        radioButton_warn->setText(QCoreApplication::translate("AktionSelektDialog", "Warnung", nullptr));
+        radioButton_error->setText(QCoreApplication::translate("AktionSelektDialog", "Fehler", nullptr));
+        label_10->setText(QCoreApplication::translate("AktionSelektDialog", "Icon:", nullptr));
+        label_13->setText(QCoreApplication::translate("AktionSelektDialog", "Modality:", nullptr));
+        comboBox->setItemText(0, QCoreApplication::translate("AktionSelektDialog", "Keine Modality", nullptr));
+        comboBox->setItemText(1, QCoreApplication::translate("AktionSelektDialog", "Fenster Modality", nullptr));
+        comboBox->setItemText(2, QCoreApplication::translate("AktionSelektDialog", "Programm Modality", nullptr));
+
         label_5->setText(QCoreApplication::translate("AktionSelektDialog", "Befehl:", nullptr));
         label_6->setText(QCoreApplication::translate("AktionSelektDialog", "Fenstername:", nullptr));
         label_7->setText(QCoreApplication::translate("AktionSelektDialog", "\303\234bereinstimmung:", nullptr));

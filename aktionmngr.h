@@ -15,6 +15,12 @@ namespace Ui {
 class AktionMngr;
 }
 
+enum MSG_TYPE {
+    information,
+    critical,
+    warning
+};
+
 class AktionMngr : public QDialog
 {
     Q_OBJECT
@@ -38,6 +44,11 @@ public:
     AKTIONMNGR_DATA getInitData();
 
     QString getListName(AKTION action);
+
+
+signals:
+
+    void wandCreateMsgBox(int type, QString title, QString msg);
 
 
 private slots:

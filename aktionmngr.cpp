@@ -239,8 +239,6 @@ QString AktionMngr::getListName(AKTION action)
 
 
 
-
-
 AktionExecuterThread::AktionExecuterThread(AktionMngr *parent, PiManager * piMngr)
     : QThread(parent),  waitugoon(false),isdisabled(false), aktionMngr(parent)
 {
@@ -348,7 +346,8 @@ bool AktionExecuterThread::startSequenz()
 }
 
 
-#include <QMessageBox>
+
+
 
 void AktionExecuterThread::run()
 {
@@ -399,6 +398,7 @@ void AktionExecuterThread::run()
 
             } else if ( action.type == action.SHOW_MSG ) {
                 std::cout << "showMsg...: " << action.showMsg.getMsg().toStdString() << std::endl;
+                emit aktionMngr->wandCreateMsgBox(MSG_TYPE::information, action.showMsg.getMsg(), action.showMsg.getMsg() );
 
             }
 
