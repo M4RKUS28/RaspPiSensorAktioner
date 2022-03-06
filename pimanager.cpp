@@ -1,7 +1,7 @@
 #include "pimanager.h"
 
-PiManager::PiManager(std::string ip, unsigned short port)
-    : ip(ip), port(port), dorState( -1 )
+PiManager::PiManager()//std::string ip, unsigned short port)
+ //   : ip(ip), port(port), dorState( -1 )
 {
     client = new client_TCP_Lib();
     client->autoCleanUpInTheEnd = false;
@@ -78,7 +78,7 @@ dorState = -1;
 
 
 
-int PiManager::connect()
+int PiManager::connect(std::string ip, int port)
 {
     if( client->isConnected() )
         return 1;
@@ -130,6 +130,11 @@ int PiManager::getSensorState(PiManager::SENSOR s)
         return temperature;
     }
     return 0;
+}
+
+QString PiManager::getLastErrorMsg()
+{
+    return QString::fromStdString( client->getLastError() );
 }
 
 int PiManager::startThread()

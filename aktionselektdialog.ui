@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>426</height>
+    <height>427</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,6 +69,11 @@
        <string>Computer Herunterfahren / Neustarten</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Bedingsüberprüfung</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="1" column="0">
@@ -106,7 +111,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QSpinBox" name="spinBox">
+        <widget class="QSpinBox" name="spinBox_sleep_time_m_sec">
          <property name="maximum">
           <number>999</number>
          </property>
@@ -520,7 +525,6 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -537,7 +541,6 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -551,7 +554,6 @@
          <property name="font">
           <font>
            <pointsize>8</pointsize>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -582,7 +584,6 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -615,7 +616,6 @@
             <property name="font">
              <font>
               <pointsize>9</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -661,7 +661,6 @@
             <property name="font">
              <font>
               <pointsize>9</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -709,7 +708,6 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -763,7 +761,6 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1025,7 +1022,6 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1224,7 +1220,35 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_8"/>
+     <widget class="QWidget" name="page_8_checkCondition">
+      <layout class="QGridLayout" name="gridLayout_6">
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBox_3"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QComboBox" name="comboBox_2"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QComboBox" name="comboBox_4"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+       <item row="1" column="2">
+        <spacer name="verticalSpacer_11">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="page_9"/>
      <widget class="QWidget" name="page_10"/>
     </widget>

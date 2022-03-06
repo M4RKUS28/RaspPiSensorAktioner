@@ -24,7 +24,6 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -48,7 +47,6 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -184,7 +182,6 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -223,7 +220,6 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -259,7 +255,6 @@
      <property name="font">
       <font>
        <pointsize>11</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -291,7 +286,6 @@
          </property>
          <property name="font">
           <font>
-           <family>Liberation Sans</family>
            <pointsize>26</pointsize>
           </font>
          </property>
@@ -325,9 +319,7 @@
          </property>
          <property name="font">
           <font>
-           <family>Liberation Sans</family>
            <pointsize>31</pointsize>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -377,7 +369,6 @@
          </property>
          <property name="font">
           <font>
-           <family>Liberation Sans</family>
            <pointsize>16</pointsize>
           </font>
          </property>
@@ -402,9 +393,7 @@
          </property>
          <property name="font">
           <font>
-           <family>Liberation Sans</family>
            <pointsize>16</pointsize>
-           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
            <underline>false</underline>
@@ -412,6 +401,39 @@
          </property>
          <property name="text">
           <string>▼</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Aktivieren</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Deaktivieren</string>
          </property>
         </widget>
        </item>

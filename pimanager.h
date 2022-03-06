@@ -16,19 +16,20 @@ public:
         TEMPERATURE
     };
 
-    PiManager(std::string ip, unsigned short port);
+    PiManager();//(std::string ip, unsigned short port);
      ~PiManager();
 
-    int connect();
+    int connect(std::string ip, int port);
     void disconnect();
     bool isConnected();
 
     int getSensorState(enum SENSOR s);
 
+    QString getLastErrorMsg();
 private:
     client_TCP_Lib * client;
-    std::string ip;
-    unsigned short port;
+    //std::string ip;
+    //unsigned short port;
 
     int dorState = 0;
     int temperature = 0;

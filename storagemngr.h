@@ -24,8 +24,9 @@ public:
     AKTIONMNGR_DATA aktionMngrDataFromQString(QString str);
     AKTION getAktionByQString(QString str);
 
-private:
     QString filePath;
+
+private:
 
     bool idExists( QString id );
     bool saveIntInVarFailed(int &saveTo, const QString &str);

@@ -161,7 +161,7 @@ QString StorageMngr::aktionMngrDataToQString(const AKTIONMNGR_DATA &data)
      auto retVal = "{" + QString( "ID=" + data.id + ",NAME=" + data.getString(data.NAME, false) + ",EXEC_COUNT=" + QString::number(data.anzahl_ausfuehrungen)
                                   + ",UPDATE_RATE=" + QString::number(data.aktualisierungsrate) + ",ENABLED=" + QString::number(data.enabled)
                                   + ",IND_BED_1=" + QString::number(data.indexBed1) + ",IND_BED_2=" + QString::number(data.indexBed2) + ",IND_BED_3=" + QString::number(data.indexBed3)
-                                  + ",INPUT_BED=" + data.getString(data.BEDINGUNG_INPUT_TEXT, false) + ",");
+                                  + ",INPUT_BED=" + data.getString(data.BEDINGUNG_INPUT_TEXT, false) + ",MAIN_DATA_PI_ADDR=" +  data.piAddr + ",");
 
      for ( const auto & action : data.aktionList ) {
         retVal += "AKTION=[TYPE=";
@@ -193,6 +193,8 @@ QString StorageMngr::aktionMngrDataToQString(const AKTIONMNGR_DATA &data)
 
         retVal += ";SLEEP_TIME_MIN=" + QString::number(action.sleep.sleep_time_minuten) + ";"
                 + "SLEEP_TIME_SEC=" + QString::number(action.sleep.sleep_time_sekunden) + ";"
+                + "SLEEP_TIME_M_SEC=" + QString::number(action.sleep.sleep_time_m_sec) + ";"
+
                 + "RC_COMMAND=" + action.runCommand.getCommand(false) + ";"
                 + "CWV_W_NAME=" + action.changeWVisibility.getWindowName(false) + ";"
                 + "CWV_W_PARITY=" + QString::number(action.changeWVisibility.wNameParity) + ";"
@@ -288,8 +290,9 @@ AKTIONMNGR_DATA StorageMngr::aktionMngrDataFromQString(QString str)
         } else if ( what == "INPUT_BED" ) {
             retVal.setStringValue(AKTIONMNGR_DATA::BEDINGUNG_INPUT_TEXT, value );
 
-        } else if ( what == "id" ) {
-            retVal.id = value;
+        } else if ( what == "MAIN_DATA_PI_ADDR" ) {
+            retVal.piAddr = value ;
+
         } else if ( what == "id" ) {
             retVal.id = value;
         } else if ( what == "id" ) {
@@ -316,7 +319,7 @@ AKTION StorageMngr::getAktionByQString(QString str)
     str.remove(0, 1);
     str.remove(str.length() - 1, 1);
     QStringList strList = str.split(';');
-    for( const auto &line : strList ) {
+    for( const auto &line : qAsConst(strList) ) {
         if(line == "")
             continue;
         QString what = line.left(line.indexOf("="));
@@ -429,7 +432,9 @@ AKTION StorageMngr::getAktionByQString(QString str)
             if(saveIntInVarFailed(aktion.moveWindow.useAbsoluteHeight, value) )
                 return AKTION();
 
-        } else if( what == "" ) {
+        } else if( what == "SLEEP_TIME_M_SEC" ) {
+            if(saveIntInVarFailed( aktion.sleep.sleep_time_m_sec, value ) )
+                return AKTION();
 
         } else if( what == "" ) {
 

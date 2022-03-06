@@ -27,7 +27,7 @@ AktionSelektDialog::~AktionSelektDialog()
 AKTION AktionSelektDialog::getAktion()
 {
     enum AKTION::TYPE type = AKTION::TYPE( ui->comboBox_select_Aktion->currentIndex() );
-    struct AKTION::Sleep sleep(ui->spinBox_sleep_time_sekunden->value(), ui->spinBox_sleep_time_minuten->value());
+    struct AKTION::Sleep sleep(ui->spinBox_sleep_time_m_sec->value(), ui->spinBox_sleep_time_sekunden->value(), ui->spinBox_sleep_time_minuten->value());
     struct AKTION::RunCommand runCommand( ui->lineEdit_command->text() );
     struct AKTION::ShowMsg s( this->ui->lineEdit_sendMessage_messag->text() );
     struct AKTION::ChangeWindowVisibility cwv(this->ui->lineEdit_chacnhe_visibility_window_name->text(),
@@ -63,6 +63,7 @@ void AktionSelektDialog::loadAktion(const AKTION &aktion)
     //SLEEP
         ui->spinBox_sleep_time_sekunden->setValue( aktion.sleep.sleep_time_sekunden );
         ui->spinBox_sleep_time_minuten->setValue( aktion.sleep.sleep_time_minuten );
+        ui->spinBox_sleep_time_m_sec->setValue( aktion.sleep.sleep_time_m_sec );
 
     //case AKTION::RUN_COMMAND:
         ui->lineEdit_command->setText( aktion.runCommand.getCommand() );

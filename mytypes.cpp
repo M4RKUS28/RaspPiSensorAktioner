@@ -31,8 +31,8 @@ AKTION::Sleep::Sleep()
 
 }
 
-AKTION::Sleep::Sleep(int sec, int min)
-    : sleep_time_sekunden(sec),sleep_time_minuten(min)
+AKTION::Sleep::Sleep(int m_sec, int sec, int min)
+    : sleep_time_sekunden(sec), sleep_time_minuten(min), sleep_time_m_sec(m_sec)
 {
 
 }
@@ -140,10 +140,21 @@ QString AKTIONMNGR_DATA::getString(const STRING &str, bool withSonderzeichen) co
 
 
 
-void AKTIONMNGR_DATA::setStringValue(const AKTIONMNGR_DATA::STRING &str, QString value)
+void AKTIONMNGR_DATA::setStringValue(const AKTIONMNGR_DATA::STRING &str, const QString &value)
 {
     strings[str] = AKTION::reReplaceSZ( value );
 }
+
+const QString AKTIONMNGR_DATA::getPiAddr() const
+{
+    return AKTION::reReplaceSZ(piAddr);
+}
+
+void AKTIONMNGR_DATA::setPiAddr(const QString &newPiAddr)
+{
+    piAddr = AKTION::replaceSZ(newPiAddr);
+}
+
 
 
 AKTION::SoundMute::SoundMute()

@@ -4,7 +4,12 @@
 #include "aktionmngr.h"
 #include "storagemngr.h"
 #include "pimanager.h"
+
 #include <QMessageBox>
+#include <QSettings>
+#include <QInputDialog>
+#include <QFileDialog>
+
 
 
 QT_BEGIN_NAMESPACE
@@ -19,10 +24,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    int initList( QList<AKTIONMNGR_DATA> &list );
+
     std::vector<AktionMngr *> aktionMngrList;
     StorageMngr * storgMngr;
     PiManager *piMngr;
 
+
+    AKTIONMNGR_DATA mainData;
     QList<AKTIONMNGR_DATA> getAktMngrDataList();
 
 private slots:
@@ -49,6 +58,18 @@ private slots:
     void createMessageBoxWarning(QString msg);
 
 
+
+    void on_pushButton_import_clicked();
+
+    void on_pushButton_export_clicked();
+
+    void on_actionAktivieren_checkableChanged(bool checkable);
+
+    void on_actionDeaktivieren_triggered();
+
+    void on_actionAktivieren_triggered();
+
+    void on_actionNeue_Addresse_festlegen_triggered();
 
 private:
     Ui::MainWindow *ui;

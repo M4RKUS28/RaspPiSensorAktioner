@@ -46,11 +46,14 @@ struct AKTION{
     static QString replaceSZ(QString text);
     static QString reReplaceSZ(QString text);
 
+    bool enabled = true;
+
     struct Sleep {
         Sleep();
-        Sleep(int sec, int min);
+        Sleep(int m_sec, int sec, int min);
         int sleep_time_sekunden = 0;
         int sleep_time_minuten = 0;
+        int sleep_time_m_sec = 0;
     } sleep;
 
     struct RunCommand {
@@ -166,7 +169,16 @@ struct AKTIONMNGR_DATA {
 
 
     QString getString(const STRING & str, bool withSonderzeichen = true) const;
-    void  setStringValue(const STRING & str, QString value);
+    void  setStringValue(const STRING & str, const QString &value);
+
+
+    //DATA for GLOABAL AKTIONMNGR DATA
+    QString piAddr;
+
+
+public:
+    const QString getPiAddr() const;
+    void setPiAddr(const QString &newPiAddr);
 
 private:
     QString strings[3];

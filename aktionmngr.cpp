@@ -38,7 +38,7 @@ AktionMngr::~AktionMngr()
 
 void AktionMngr::on_pushButton_add_aktion_clicked()
 {
-    //create  gui witch empty aktion
+    //create  gui with empty aktion
     AktionSelektDialog newAktionGui(this);
     newAktionGui.show();
     //wait for click finish
@@ -213,22 +213,28 @@ QString AktionMngr::getListName(AKTION action)
         break;
     case AKTION::SLEEP:
         name = "[ Pause ]: " "Warte für " + QString::number( action.sleep.sleep_time_minuten ) + "m "
-                                          + QString::number( action.sleep.sleep_time_sekunden ) + "s";
+                                          + QString::number( action.sleep.sleep_time_sekunden ) + "s "
+                                          + QString::number( action.sleep.sleep_time_m_sec ) + "ms";
+
         break;
     case AKTION::RUN_COMMAND:
-        name =  "[ Führe Befehl aus ]: " "Befehl: '" + action.runCommand.getCommand() + "'";
+        name =  "[ Führe Befehl aus ]: " "Befehl: \"" + action.runCommand.getCommand() + "\"";
         break;
     case AKTION::SHOW_MSG:
-        name =  "[ Nachricht anzeigen ]: " "Nachricht: '"   "'";
+        name =  "[ Nachricht anzeigen ]: " "Nachricht: \"" + action.showMsg.getMsg() +  "\"";
         break;
     case AKTION::WINDOW_CHANCHE_POS:
-        name =  "[ Fenster Bewegung ]: " "Bewege das Fenster '"    "' nach ";
+        name =  "[ Fenster Bewegung ]: " "Bewege das Fenster \"" + action.moveWindow.getWindowName() + "\" ("+QString::number( action.moveWindow.nWidth )  + "x" + QString::number( action.moveWindow.nHeigth )
+                +  ") nach ("
+                + QString::number( action.moveWindow.newPosX ) + "|" + QString::number(action.moveWindow.newPosY ) + ")";
         break;
     case AKTION::WINDOW_CHANCHE_VISIBILITY:
-        name =  "[ Fenster Sichtbarkeit verändern ]: " "Mache das Fenster '"    "' un/sichtbar ";
+        name =  "[ Fenster Sichtbarkeit verändern ]: " "Mache das Fenster " + QString(action.changeWVisibility.state == action.changeWVisibility.VISIBLE ? "sichtbar" : "unsichtbar" );
         break;
     case AKTION::RECHECK_CONDITION:
-        name =  "[ Wiederhohle Bedingungscheck ]: " "Bedingung xyz";
+        name =  "[ Wiederhohle Bedingungscheck ]: " + QString( action.reCheckCondition.effekt == action.reCheckCondition.SKIP_NEXT_AKTION ? "Wenn erfüllt, überspringe nächste Aktion"
+                                              :   ( action.reCheckCondition.effekt == action.reCheckCondition.STOP_PROGRAMM ? "Wenn erfüllt, beende das Programm"
+                                              : "Wenn erfüllt, brich die Sequenz ab"  )   );
         break;
     default:
         name =  "[ Unbekannte Aktion ]: " "ID: " + QString::number(action.type);
@@ -357,8 +363,8 @@ void AktionExecuterThread::run()
     while ( ! this->isInterruptionRequested() ) {
         usleep ( aktionMngr->ui->spinBox_aktualisierungsrate->value() * 1000 );
 
-        if( ! aktionMngr->isHidden() )
-            this->waitUGoOn();
+    //    if( ! aktionMngr->isHidden() )
+    //        this->waitUGoOn();
         if( this->waitugoon || this->isdisabled )
             continue;
         if( !startSequenz() ) { // check if start coindition is true
@@ -366,14 +372,15 @@ void AktionExecuterThread::run()
             continue;
         }
         if( (ui->spinBox_anzahl_ausfuehrungen->value() != 0) && execCount >= ui->spinBox_anzahl_ausfuehrungen->value()) {
-            //std::cout << " Maximal ausführungen erreicht " << std::endl;
+            std::cout << " Maximal ausführungen erreicht " << std::endl;
             continue;
         }
         else
             execCount++;
 
         for ( auto &action : aktionMngr->aktionList ) {
-
+             if( this->waitugoon || this->isdisabled )
+                break;
 
              if(action.type == action.SLEEP) {
                 std::cout << "SLEEP..." << std::endl;
