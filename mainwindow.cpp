@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    globVars = new QMap<QString, QString>();
+
     storgMngr = new StorageMngr( /*QDir::currentPath()*/ QDir::homePath() + "/settings.senacs");
     QList<AKTIONMNGR_DATA> aML = storgMngr->getInitDataList();
 
@@ -22,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
         md.id = "-1";
 
         //Default settings:
-        md.setPiAddr("raspberrypi:2000");
+        md.setPiAddr(defaultPiAddr);
 
 
         //save new version
@@ -103,11 +105,20 @@ int MainWindow::initList(QList<AKTIONMNGR_DATA> &aML)
             //INIT DATA FOR THIS THREAD
             ui->action127_0_0_1->setText( aM.getPiAddr() );
 
+            //load global Vars
+            for(const auto &e : aM.aktionList) {
+                if(e.type == AKTION::GLOBAL_VAR) {
+                    if( e.globalVar.getName() != "" )
+                        globVars->insert( e.globalVar.getName(), e.globalVar.getValue() );
+                }
+
+            }
+
             continue;
         }
 
 
-        AktionMngr * newAktionMngr = new AktionMngr(this, piMngr, aM);
+        AktionMngr * newAktionMngr = new AktionMngr(this, piMngr, aM, globVars);
         QListWidgetItem * newLWI = new QListWidgetItem( newAktionMngr->getName() );
         this->ui->listWidget->addItem(newLWI);
         if( ! aM.enabled ) {
@@ -128,16 +139,22 @@ int MainWindow::initList(QList<AKTIONMNGR_DATA> &aML)
 
         //connect object
         connect(newAktionMngr, SIGNAL(wandCreateMsgBox(int,QString,QString)), this, SLOT(createMessageBox(int,QString,QString)));
+        connect(newAktionMngr, SIGNAL(wantchangeVarValue(QString,QString)), this, SLOT(changeVarValue(QString,QString)));
+
         //Start thread
         newAktionMngr->mThread->start();
     }
 
+    return 0;
 
 }
 
 
 MainWindow::~MainWindow()
 {
+    storgMngr->reStoreAll(this->getAktMngrDataList());
+
+
     for ( auto e : aktionMngrList )
         if(e)
             delete e;
@@ -145,6 +162,8 @@ MainWindow::~MainWindow()
     delete ui;
     delete storgMngr;
     delete piMngr;
+
+    delete globVars;
 
     perror("~MainWindow()");
 }
@@ -154,6 +173,17 @@ MainWindow::~MainWindow()
 QList<AKTIONMNGR_DATA> MainWindow::getAktMngrDataList()
 {
     QList<AKTIONMNGR_DATA> l;
+    //save main dad & vars
+
+    //Lösche alten Stand und fülle mit neuem auf
+    mainData.aktionList.clear();
+
+    QMapIterator<QString, QString> i(*globVars);
+    while (i.hasNext()) {
+        i.next();
+        mainData.aktionList.push_back(AKTION(i.key(), i.value()));
+    }
+
     l.push_front(mainData);
 
     for( unsigned i = 0; i < this->aktionMngrList.size(); i++)
@@ -268,8 +298,10 @@ void MainWindow::on_pushButton_removeAktionMngr_clicked()
     if (currentItem == nullptr) {
         ui->statusbar->showMessage("Konnte Eintrag nicht aus der Liste entfernen!", 1000);
         return;
-    } else
+    } else {
+
         delete currentItem;
+    }
 
     if(index < 0 || index >= static_cast<int>(this->aktionMngrList.size()) ) {
         std::cout << "Error: Invalid User Data" << std::endl;
@@ -277,6 +309,8 @@ void MainWindow::on_pushButton_removeAktionMngr_clicked()
     }
     //remove aktion from vector
     auto pT = aktionMngrList.at(index);
+    pT->mThread->waitUGoOn();
+
     this->aktionMngrList.erase( this->aktionMngrList.begin() + index);
     //remove entry from storage
     //storgMngr->remove(pT->id);
@@ -292,7 +326,7 @@ void MainWindow::on_pushButton_add_aktionMngr_clicked()
     //wenn das fenster mit der selben id berits abgespeichert wurde, bevor getNewID() aufgerufen wurde
     this->ui->pushButton_add_aktionMngr->setDisabled(true);
 
-    AktionMngr * newAktionMngr = new AktionMngr(this, piMngr, storgMngr->getNewID() );
+    AktionMngr * newAktionMngr = new AktionMngr(this, piMngr, storgMngr->getNewID(), globVars );
 
     newAktionMngr->show();
     if( newAktionMngr->QDialog::exec() == 0 /* == abgelehnt */ ) {
@@ -324,6 +358,7 @@ void MainWindow::on_pushButton_add_aktionMngr_clicked()
 
     //connect object
     connect(newAktionMngr, SIGNAL(wandCreateMsgBox(int, QString, QString)), this, SLOT(createMessageBox(int, QString, QString)));
+    connect(newAktionMngr, SIGNAL(wantchangeVarValue(QString, QString)), this, SLOT(changeVarValue(QString, QString)));
 
     //Start thread
     newAktionMngr->mThread->start();
@@ -350,6 +385,8 @@ void MainWindow::on_pushButton_enable_clicked()
 
     aktionMngrList.at(index)->mThread->enable();
     storgMngr->reStoreAll( this->getAktMngrDataList() );
+    aktionMngrList.at(index)->mThread->goOn();
+
 }
 
 void MainWindow::on_pushButton_disable_clicked()
@@ -382,11 +419,11 @@ void MainWindow::on_pushButton_clicked()
     auto d = mainData.getPiAddr().split(':');
     if (d.size() != 2 || ( ( port = d.at(1).toInt()) <= 0 || port > 65535 ) ) {
         ui->statusbar->showMessage("Ungültige Addresse für Pi!", 2000);
-        ip = "raspberrypi";
-        port = 2000;
+        ip = defaultPiAddrIp;
+        port = defaultPiAddrPort;
 
-        mainData.setPiAddr("raspberrypi:2000");
-        this->ui->action127_0_0_1->setText("raspberrypi:2000");
+        mainData.setPiAddr(defaultPiAddr);
+        this->ui->action127_0_0_1->setText(defaultPiAddr);
         storgMngr->reStoreAll(this->getAktMngrDataList());
 
 
@@ -415,6 +452,13 @@ void MainWindow::createMessageBox(int type, QString title, QString msg)
     else // (type == MSG_TYPE::information )
         QMessageBox::information(this, title, msg);
 
+}
+
+void MainWindow::changeVarValue(QString name, QString value/*bool store in file*/)
+{
+    value.replace("\n", "");
+    if(name != "")
+        this->globVars->insert(name, value);
 }
 
 
@@ -555,4 +599,36 @@ void MainWindow::on_actionNeue_Addresse_festlegen_triggered()
     }
 
 }
+
+
+void MainWindow::on_actionAnzeigen_triggered()
+{
+    //Stoppe alle programme:
+
+    for( auto &e : this->aktionMngrList )
+        if( ! e->mThread->isDisabled() )
+            e->mThread->waitUGoOn();
+
+
+    varEditor newVarEditorGui(*globVars, this);
+    newVarEditorGui.setWindowModality(Qt::WindowModality::ApplicationModal );
+    newVarEditorGui.show();
+
+    //wait for click finish
+    if( newVarEditorGui.QDialog::exec() == QDialog::Accepted ) {
+        //Save new vars
+        (*this->globVars) = newVarEditorGui.vars;
+
+        //save vars in file
+        storgMngr->reStoreAll( this->getAktMngrDataList() );
+    }
+
+    //starte wieder alle threads:
+    for( auto &e : this->aktionMngrList )
+        if( ! e->mThread->isDisabled() )
+            e->mThread->goOn();
+
+}
+
+
 

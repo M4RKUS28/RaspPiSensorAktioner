@@ -33,7 +33,15 @@ struct AKTION{
         WINDOW_CHANCHE_VISIBILITY = 4,
         SOUND_MUTE = 5,
         RECHECK_CONDITION = 6,
-        WINDOW_CHANCHE_POS = 7
+        WINDOW_CHANCHE_POS = 7,
+        //MOVE_MOUSE = 8,
+        //SHUTDOWN_PC = 9
+        //CECHK CONDITION = 10
+        //SEND TCP MSG = 11
+
+        EDIT_VAR = 12,
+
+        GLOBAL_VAR = 999
     } type;
 
     enum WINDOW_NAME_PARITY {
@@ -45,6 +53,9 @@ struct AKTION{
 
     static QString replaceSZ(QString text);
     static QString reReplaceSZ(QString text);
+
+    static void setString( QString &ziel, const QString &value, bool hasSonderzeichen = true );
+    static QString getString(  const QString &var, bool withSonderzeichen = true );
 
     bool enabled = true;
 
@@ -58,11 +69,12 @@ struct AKTION{
 
     struct RunCommand {
         RunCommand();
-        RunCommand( QString command );
+        RunCommand(QString command, QString saveInVarNameWITHSZ, int saveInt );
         void setCommand(QString command);
         QString getCommand( bool withSonderzeichen = true) const;
-    private:
-        QString command;
+
+        QString command, saveInVarName;
+        int saveVar = false;
 
 
     } runCommand;
@@ -72,6 +84,7 @@ struct AKTION{
         ShowMsg( QString msg );
         void setMsg(QString command);
         QString getMsg( bool withSonderzeichen = true) const;
+        QString title;
     private:
         QString msg;
     } showMsg;
@@ -134,10 +147,35 @@ struct AKTION{
         QString windowName;
     } moveWindow;
 
+    struct GlobalVar {
+        GlobalVar();
+        GlobalVar(QString nameWITHSZ, QString valueWITHSZ);
 
+        void setName(QString nameMitSonderzeicehn);
+        QString getName( bool withSonderzeichen = true) const;
 
+        void setValue(QString valueMitSOnderzeicehn);
+        QString getValue( bool withSonderzeichen = true) const;
 
-    AKTION(enum TYPE t, struct Sleep s, struct RunCommand r, ShowMsg sMsg, ChangeWindowVisibility cwv, SoundMute sm, ReCheckCondition rcc, MoveWindow mw);
+        QString name, value;
+
+    } globalVar;
+
+    struct EditVar {
+        EditVar();
+        EditVar( QString Name, QString setValue  );
+        void setEditVarName(QString nameMitSonderzeichen);
+        void setEditVarNewValue(QString valueMitSonderzeichen);
+
+        QString getName( bool withSonderzeichen = true) const;
+        QString getNewValue( bool withSonderzeichen = true) const;
+
+        QString name, newValue;
+
+    } editVar;
+
+    AKTION(enum TYPE t, struct Sleep s, struct RunCommand r, ShowMsg sMsg, ChangeWindowVisibility cwv, SoundMute sm, ReCheckCondition rcc, MoveWindow mw, EditVar eV);
+    AKTION(QString globVarName, QString globVarValue);
 };
 
 

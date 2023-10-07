@@ -10,18 +10,34 @@ AKTION::AKTION()
 QString AKTION::replaceSZ(QString text)
 {
     return text.replace(";", "#SIMICOLON#").replace(",", "#KOMMA#").replace("[", "#ECK_KLAMMER_AUF#").replace
-                       ("]", "#ECK_KLAMMER_ZU#").replace("{", "#GESCHW_KLAMMER_AUF#").replace("}", "#GESCHW_KLAMMER_ZU#") ;
+                       ("]", "#ECK_KLAMMER_ZU#").replace("{", "#GESCHW_KLAMMER_AUF#").replace("}", "#GESCHW_KLAMMER_ZU#").replace("\n", "#BACKSLASHn#") ;
 }
 
 QString AKTION::reReplaceSZ(QString text) {
     return text.replace("#KOMMA#", ",").replace("#SIMICOLON#", ";" ).replace("#ECK_KLAMMER_AUF#", "[" ).replace( "#ECK_KLAMMER_ZU#", "]" ).
-           replace("#GESCHW_KLAMMER_AUF#", "{").replace("#GESCHW_KLAMMER_ZU#", "}");
+            replace("#GESCHW_KLAMMER_AUF#", "{").replace("#GESCHW_KLAMMER_ZU#", "}").replace("#BACKSLASHn#", "\n");
+}
+
+void AKTION::setString(QString &ziel, const QString &value, bool hasSonderzeichen)
+{
+    ziel = hasSonderzeichen ? replaceSZ(value) : value;
+}
+
+QString AKTION::getString(const QString &var, bool withSonderzeichen)
+{
+    return withSonderzeichen ? reReplaceSZ(var) : var;
 }
 
 AKTION::AKTION(AKTION::TYPE t, AKTION::Sleep s, AKTION::RunCommand r, AKTION::ShowMsg sMsg, AKTION::ChangeWindowVisibility cwv,
-               AKTION::SoundMute sm, AKTION::ReCheckCondition rcc, AKTION::MoveWindow mw)
+               AKTION::SoundMute sm, AKTION::ReCheckCondition rcc, AKTION::MoveWindow mw, EditVar eV)
     : type(t), sleep(s), runCommand(r), showMsg(sMsg), changeWVisibility(cwv),
-      soundMute(sm), reCheckCondition(rcc), moveWindow(mw)
+      soundMute(sm), reCheckCondition(rcc), moveWindow(mw), editVar(eV)
+{
+
+}
+
+AKTION::AKTION(QString globVarName, QString globVarValue)
+    : type(TYPE::GLOBAL_VAR), globalVar(GlobalVar(globVarName, globVarValue) )
 {
 
 }
@@ -42,9 +58,11 @@ AKTION::RunCommand::RunCommand()
 
 }
 
-AKTION::RunCommand::RunCommand(QString command)
+AKTION::RunCommand::RunCommand(QString command, QString saveInVarNameWITHSZ, int saveInt)
 {
     setCommand(command);
+    AKTION::setString( this->saveInVarName, saveInVarNameWITHSZ, true);
+    saveVar = saveInt;
 }
 
 void AKTION::RunCommand::setCommand(QString command)
@@ -241,4 +259,66 @@ void MyRect::fillUp(AKTION::MoveWindow w)
     else
         this->h += w.nHeigth;
 
+}
+
+AKTION::GlobalVar::GlobalVar()
+{
+
+}
+
+AKTION::GlobalVar::GlobalVar(QString nameWITHSZ, QString valueWITHSZ)
+{
+    name = replaceSZ(nameWITHSZ);
+    value = replaceSZ(valueWITHSZ);
+}
+
+void AKTION::GlobalVar::setName(QString nameMitSonderzeicehn)
+{
+    name = replaceSZ(nameMitSonderzeicehn);
+}
+
+QString AKTION::GlobalVar::getName(bool withSonderzeichen) const
+{
+    return withSonderzeichen ? name : reReplaceSZ(name);
+}
+
+void AKTION::GlobalVar::setValue(QString valueMitSOnderzeicehn)
+{
+    value = replaceSZ(valueMitSOnderzeicehn);
+}
+
+QString AKTION::GlobalVar::getValue(bool withSonderzeichen) const
+{
+    return withSonderzeichen ? value : reReplaceSZ(value);
+}
+
+AKTION::EditVar::EditVar()
+{
+
+}
+
+AKTION::EditVar::EditVar(QString Name, QString setValue)
+{
+    setEditVarName(Name);
+    setEditVarNewValue(setValue);
+}
+
+void AKTION::EditVar::setEditVarName(QString nameMitSonderzeichen)
+{
+    name = replaceSZ(nameMitSonderzeichen);
+}
+
+void AKTION::EditVar::setEditVarNewValue(QString valueMitSonderzeichen)
+{
+    newValue = replaceSZ(valueMitSonderzeichen);
+}
+
+QString AKTION::EditVar::getName(bool withSonderzeichen) const
+{
+    return withSonderzeichen ? name : reReplaceSZ(name);
+}
+
+QString AKTION::EditVar::getNewValue(bool withSonderzeichen) const
+{
+    return withSonderzeichen ? newValue : reReplaceSZ( newValue );
 }

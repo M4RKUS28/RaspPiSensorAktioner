@@ -66,58 +66,6 @@ void StorageMngr::reStoreAll(QList<AKTIONMNGR_DATA> dataList)
     loadData.close();
 }
 
-/*
-void StorageMngr::remove(QString id)
-{
-    if(id == "") {
-        perror("ERROR:try to store data with no id");
-        return;
-    }
-
-    QFile loadData(filePath);
-    if( loadData.open(QFile::ReadOnly) == false)
-        fileOpenFailed();
-    QList<QString> lineList = QString(loadData.readAll()).split('}');
-    loadData.close();
-
-    if( idExists(id) ) {
-        QString toWriteText;
-        bool edited = false;
-        for( unsigned i = 0; i < lineList.size(); i++) {
-
-            if( ! lineList.at(i).contains("ID=") || ! lineList.at(i).contains("{") )
-                continue;
-            if( lineList.at(i).contains("ID=" + id + ",") ) {
-                std::cout << "Lösche..:" << lineList.at(i).toStdString() << std::endl;
-
-                if(edited)
-                    std::cout <<("Es wurde bereits ein Eintrag dieser ID gelöscht - lösche nächsten!") << std::endl;
-                else
-                    edited = true;
-
-                lineList.remove(i);
-                i--; // aktuelle postion hat sich geändert
-                continue; // wichtig, sonst stürzt programm ab, wenn die zeile wieder hinzugefügt wird
-            }
-
-            toWriteText += lineList.value(i).remove(0, lineList.at(i).lastIndexOf('{'))  + "}\n";
-        }
-        if( !edited ) {
-            perror("Coulnd't find id in file, but idExists() returns exist = true!!");
-            return;
-        }
-
-        if( loadData.open(QFile::WriteOnly | QIODevice::Truncate) == false)
-            fileOpenFailed();
-        loadData.write( toWriteText.toStdString().c_str() );
-        loadData.close();
-
-
-    } else {
-        perror("Konnte aktionEntry nicht löschen: kein eintrag mit dieser id gefunden!");
-    }
-}
-*/
 
 AKTIONMNGR_DATA StorageMngr::getInitData(QString id)
 {
@@ -158,11 +106,13 @@ QString StorageMngr::getNewID()
 
 QString StorageMngr::aktionMngrDataToQString(const AKTIONMNGR_DATA &data)
 {
+    //Ablauf einstellungen
      auto retVal = "{" + QString( "ID=" + data.id + ",NAME=" + data.getString(data.NAME, false) + ",EXEC_COUNT=" + QString::number(data.anzahl_ausfuehrungen)
                                   + ",UPDATE_RATE=" + QString::number(data.aktualisierungsrate) + ",ENABLED=" + QString::number(data.enabled)
                                   + ",IND_BED_1=" + QString::number(data.indexBed1) + ",IND_BED_2=" + QString::number(data.indexBed2) + ",IND_BED_3=" + QString::number(data.indexBed3)
                                   + ",INPUT_BED=" + data.getString(data.BEDINGUNG_INPUT_TEXT, false) + ",MAIN_DATA_PI_ADDR=" +  data.piAddr + ",");
 
+     //AKTIONEN
      for ( const auto & action : data.aktionList ) {
         retVal += "AKTION=[TYPE=";
 
@@ -183,7 +133,11 @@ QString StorageMngr::aktionMngrDataToQString(const AKTIONMNGR_DATA &data)
         } else if( action.type == AKTION::WINDOW_CHANCHE_POS){
             retVal += "WINDOW_CHANCHE_POS";
         } else if( action.type == AKTION::RECHECK_CONDITION){
-                        retVal += "RECHECK_CONDITION";
+            retVal += "RECHECK_CONDITION";
+        } else if( action.type == AKTION::GLOBAL_VAR){
+            retVal += "GLOBAL_VAR";
+        } else if( action.type == AKTION::EDIT_VAR){
+            retVal += "EDIT_VAR";
 
         } else if( action.type == AKTION::EMPTY){
             retVal += "...";
@@ -196,6 +150,10 @@ QString StorageMngr::aktionMngrDataToQString(const AKTIONMNGR_DATA &data)
                 + "SLEEP_TIME_M_SEC=" + QString::number(action.sleep.sleep_time_m_sec) + ";"
 
                 + "RC_COMMAND=" + action.runCommand.getCommand(false) + ";"
+                + "RC_VARNAME=" + action.runCommand.saveInVarName + ";"
+                + "RC_SAVEOUTPUT=" +  QString::number(action.runCommand.saveVar) + ";"
+
+
                 + "CWV_W_NAME=" + action.changeWVisibility.getWindowName(false) + ";"
                 + "CWV_W_PARITY=" + QString::number(action.changeWVisibility.wNameParity) + ";"
                 + "CWV_W_STAE=" + QString( action.changeWVisibility.state == action.changeWVisibility.HIDDEN ? "HIDE" : "SHOW" ) + ";"
@@ -212,7 +170,15 @@ QString StorageMngr::aktionMngrDataToQString(const AKTIONMNGR_DATA &data)
                 + "MW_USE_ABSOLUTE_X=" +  QString::number(action.moveWindow.useAbsolutePosX) + ";"
                 + "MW_USE_ABSOLUTE_Y=" +  QString::number(action.moveWindow.useAbsolutePosY) + ";"
                 + "MW_USE_ABSOLUTE_WIDTH=" +  QString::number(action.moveWindow.useAbsoluteWidth) + ";"
-                + "MW_USE_ABSOLUTE_HEIGHT=" +  QString::number(action.moveWindow.useAbsoluteHeight) + ";";
+                + "MW_USE_ABSOLUTE_HEIGHT=" +  QString::number(action.moveWindow.useAbsoluteHeight) + ";"
+                + "GLOBAL_VAR_NAME=" +  action.globalVar.name  + ";"
+                + "GLOBAL_VAR_VALUE=" + action.globalVar.value   + ";"
+                + "EDIT_VAR_NAME=" + action.editVar.name   + ";"
+                + "EDIT_VAR_NEW_VALUE=" + action.editVar.newValue   + ";"
+
+
+
+                ;
 
 
 
@@ -347,9 +313,16 @@ AKTION StorageMngr::getAktionByQString(QString str)
                 aktion.type = AKTION::WINDOW_CHANCHE_VISIBILITY;
             else if ( value == "RECHECK_CONDITION" )
                 aktion.type = AKTION::RECHECK_CONDITION;
+            else if( value == "-" )
+                aktion.type = AKTION::EMPTY;
+            else if( value == "GLOBAL_VAR" )
+                aktion.type = AKTION::GLOBAL_VAR;
+            else if( value == "EDIT_VAR" )
+                aktion.type = AKTION::EDIT_VAR;
 
             else if( value == "-" )
                 aktion.type = AKTION::EMPTY;
+
             else {
                 std::cout << "INVALID TYPE: " << value.toStdString() << std::endl;
                 return AKTION();
@@ -436,17 +409,24 @@ AKTION StorageMngr::getAktionByQString(QString str)
             if(saveIntInVarFailed( aktion.sleep.sleep_time_m_sec, value ) )
                 return AKTION();
 
-        } else if( what == "" ) {
+        } else if( what == "GLOBAL_VAR_NAME" ) {
+            aktion.globalVar.name = value;
 
-        } else if( what == "" ) {
+        } else if( what == "GLOBAL_VAR_VALUE" ) {
+            aktion.globalVar.value = value;
 
-        } else if( what == "" ) {
+        } else if( what == "EDIT_VAR_NAME" ) {
+            aktion.editVar.name = value;
 
-        } else if( what == "" ) {
+        } else if( what == "EDIT_VAR_NEW_VALUE" ) {
+            aktion.editVar.newValue = value;
 
-        } else if( what == "" ) {
+        } else if( what == "RC_VARNAME" ) {
+            aktion.runCommand.saveInVarName = value;
 
-        } else if( what == "" ) {
+        } else if( what == "RC_SAVEOUTPUT" ) {
+            if(saveIntInVarFailed( aktion.runCommand.saveVar, value ) )
+                return AKTION();
 
         } else if( what == "" ) {
 

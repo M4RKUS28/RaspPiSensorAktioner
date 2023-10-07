@@ -4,12 +4,18 @@
 #include "aktionmngr.h"
 #include "storagemngr.h"
 #include "pimanager.h"
+#include "vareditor.h"
+
 
 #include <QMessageBox>
 #include <QSettings>
 #include <QInputDialog>
 #include <QFileDialog>
 
+
+#define defaultPiAddrIp "raspberrypi"
+#define defaultPiAddrPort 2000
+#define defaultPiAddr ( QString(defaultPiAddrIp) + QString(":") + QString::number(defaultPiAddrPort) )
 
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +38,8 @@ public:
 
 
     AKTIONMNGR_DATA mainData;
+    QMap<QString, QString> * globVars;
+
     QList<AKTIONMNGR_DATA> getAktMngrDataList();
 
 private slots:
@@ -54,6 +62,8 @@ private slots:
 
 
     void createMessageBox(int type, QString title, QString msg);
+    void changeVarValue(QString name, QString value);
+
     void createMessageBoxError(QString msg);
     void createMessageBoxWarning(QString msg);
 
@@ -70,6 +80,9 @@ private slots:
     void on_actionAktivieren_triggered();
 
     void on_actionNeue_Addresse_festlegen_triggered();
+
+    void on_actionAnzeigen_triggered();
+
 
 private:
     Ui::MainWindow *ui;

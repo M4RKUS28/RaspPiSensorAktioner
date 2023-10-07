@@ -28,12 +28,12 @@ AKTION AktionSelektDialog::getAktion()
 {
     enum AKTION::TYPE type = AKTION::TYPE( ui->comboBox_select_Aktion->currentIndex() );
     struct AKTION::Sleep sleep(ui->spinBox_sleep_time_m_sec->value(), ui->spinBox_sleep_time_sekunden->value(), ui->spinBox_sleep_time_minuten->value());
-    struct AKTION::RunCommand runCommand( ui->lineEdit_command->text() );
+    struct AKTION::RunCommand runCommand( ui->lineEdit_command->text(), this->ui->lineEdit_RUNCOMMANDVARNAME->text(), ui->radioButton_saveRUNCOMMOUTPUT->isChecked() );
     struct AKTION::ShowMsg s( this->ui->lineEdit_sendMessage_messag->text() );
     struct AKTION::ChangeWindowVisibility cwv(this->ui->lineEdit_chacnhe_visibility_window_name->text(),
                                  AKTION::WINDOW_NAME_PARITY( ui->comboBox_change_vbty_parity->currentIndex()  ),
                                 ( ui->radioButton_change_vbty_hide_button->isChecked() ? AKTION::ChangeWindowVisibility::STATE::HIDDEN : AKTION::ChangeWindowVisibility::STATE::VISIBLE)  );
-    struct AKTION::SoundMute sm( (ui->radioButton_mute_system_mute_rad_button ? AKTION::SoundMute::STATE::MUTE : AKTION::SoundMute::STATE::UNMUTE) );
+    struct AKTION::SoundMute sm;  //( (ui->radioButton_mute_system_mute_rad_button ? AKTION::SoundMute::STATE::MUTE : AKTION::SoundMute::STATE::UNMUTE) );
 
     AKTION::ReCheckCondition::EFFEKT ef;
     if(ui->radioButton_recheck_con_stop_seq->isChecked())
@@ -50,7 +50,9 @@ AKTION AktionSelektDialog::getAktion()
                                   ui->radioButton_absolute_size_width->isChecked(), ui->radioButton_absolute_size_heigth->isChecked(),
                                   ( AKTION::WINDOW_NAME_PARITY( ui->comboBox_move_window_window_parity->currentIndex()  ) ) );
 
-    return AKTION( type, sleep, runCommand, s, cwv, sm, rcc, mw );
+    struct AKTION::EditVar eV( ui->lineEdit_10_varName->text(), this->ui->lineEdit_10_newValue->text() );
+
+    return AKTION( type, sleep, runCommand, s, cwv, sm, rcc, mw, eV );
 }
 
 void AktionSelektDialog::loadAktion(const AKTION &aktion)
@@ -67,6 +69,11 @@ void AktionSelektDialog::loadAktion(const AKTION &aktion)
 
     //case AKTION::RUN_COMMAND:
         ui->lineEdit_command->setText( aktion.runCommand.getCommand() );
+        ui->lineEdit_RUNCOMMANDVARNAME->setText( AKTION::getString( aktion.runCommand.saveInVarName ) );
+        if(aktion.runCommand.saveVar)
+            ui->radioButton_saveRUNCOMMOUTPUT->click();
+
+
 
     //    case AKTION::SHOW_MSG:
         ui->lineEdit_sendMessage_messag->setText(aktion.showMsg.getMsg());
@@ -81,10 +88,11 @@ void AktionSelektDialog::loadAktion(const AKTION &aktion)
 
 
     //mute sound
+        /*
         if(aktion.soundMute.state == aktion.soundMute.MUTE)
             ui->radioButton_mute_system_mute_rad_button->click();
         else
-            ui->radioButton_mute_system_unmute_rad_button->click();
+            ui->radioButton_mute_system_unmute_rad_button->click();*/
 
         // recheck condfition
 
@@ -95,7 +103,7 @@ void AktionSelektDialog::loadAktion(const AKTION &aktion)
         else
             ui->radioButton_recheck_stop_programm->click();
 
-    //move window
+//move window
         ui->lineEdit_move_window_window_name->setText( aktion.moveWindow.getWindowName() );
         std::cout << "         ui->comboBox_move_window_window_parity->setCurrentIndex " <<  aktion.moveWindow.wNameParity << std::endl;
 
@@ -136,6 +144,10 @@ void AktionSelektDialog::loadAktion(const AKTION &aktion)
             ui->radioButton_aktiviereVollbild->click();
         else
             ui->radioButton_fenster_verschieben->click();
+
+//
+        ui->lineEdit_10_varName->setText (aktion.editVar.getName());
+        ui->lineEdit_10_newValue->setText(aktion.editVar.getNewValue());
 }
 
 void AktionSelektDialog::on_comboBox_select_Aktion_currentIndexChanged(int index)
@@ -176,4 +188,12 @@ void AktionSelektDialog::on_radioButton_aktiviereVollbild_clicked()
 }
 
 
+
+
+
+void AktionSelektDialog::on_radioButton_saveRUNCOMMOUTPUT_clicked(bool checked)
+{
+    ui->groupBox_run_command_ausgabespeichern->setEnabled( checked );
+
+}
 

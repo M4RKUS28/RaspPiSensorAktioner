@@ -1,13 +1,17 @@
 debug/aktionmngr.o
 debug/aktionselektdialog.o
+debug/editvardialog.o
 debug/main.o
 debug/mainwindow.o
 debug/mytypes.o
 debug/pimanager.o
 debug/storagemngr.o
+debug/vareditor.o
 debug/windowmanager.o
 debug/my_tcp_lib.o
 debug/moc_aktionmngr.o
 debug/moc_aktionselektdialog.o
+debug/moc_editvardialog.o
 debug/moc_mainwindow.o
 debug/moc_pimanager.o
+debug/moc_vareditor.o

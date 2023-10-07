@@ -8,6 +8,7 @@
 
 #include <QString>
 
+
 class AktionExecuterThread;
 
 
@@ -26,8 +27,8 @@ class AktionMngr : public QDialog
     Q_OBJECT
 
 public:
-    explicit AktionMngr(QWidget *parent, PiManager *piMngr, QString id);
-    explicit AktionMngr(QWidget *parent, PiManager *piMngr, const AKTIONMNGR_DATA &initData);
+    explicit AktionMngr(QWidget *parent, PiManager *piMngr, QString id, QMap<QString, QString> *gVars);
+    explicit AktionMngr(QWidget *parent, PiManager *piMngr, const AKTIONMNGR_DATA &initData, QMap<QString, QString> *gVars);
 
     ~AktionMngr();
 
@@ -37,6 +38,7 @@ public:
     AktionExecuterThread * mThread;
     QString id;
 
+
     Ui::AktionMngr *ui;
     std::vector<AKTION> aktionList;
 
@@ -45,10 +47,20 @@ public:
 
     QString getListName(AKTION action);
 
+    QString replaceVars(QString s);
+
+    const QMap<QString, QString> &getgVarListCopy() const;
+
+
+    QMap<QString, QString> *gVarsPrivate;
+
 
 signals:
 
     void wandCreateMsgBox(int type, QString title, QString msg);
+    void wantchangeVarValue(QString name, QString value);
+
+
 
 
 private slots:
@@ -62,7 +74,13 @@ private slots:
 
     void on_pushButton_moveDown_clicked();
 
-    void on_label_5_linkHovered(const QString &link);
+
+
+    void on_comboBoxBed1_currentTextChanged(const QString &arg1);
+
+    void on_comboBox_Bed2_currentTextChanged(const QString &arg1);
+
+    void on_comboBox_Bed_3_currentTextChanged(const QString &arg1);
 
 private:
 

@@ -1,9 +1,10 @@
 QT       += core gui
 
 
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++14 -static-libstdc++ -static-libgcc
+CONFIG += c++14 -static-libstdc++ -static-libgcc -lwinmm -lole32 -loleaut32
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -12,26 +13,32 @@ CONFIG += c++14 -static-libstdc++ -static-libgcc
 SOURCES += \
     aktionmngr.cpp \
     aktionselektdialog.cpp \
+    editvardialog.cpp \
     main.cpp \
     mainwindow.cpp \
     mytypes.cpp \
     pimanager.cpp \
     storagemngr.cpp \
+    vareditor.cpp \
     windowmanager.cpp
 
 HEADERS += \
     aktionmngr.h \
     aktionselektdialog.h \
+    editvardialog.h \
     mainwindow.h \
     mytypes.h \
     pimanager.h \
     storagemngr.h \
+    vareditor.h \
     windowmanager.h
 
 FORMS += \
     aktionmngr.ui \
     aktionselektdialog.ui \
-    mainwindow.ui
+    editvardialog.ui \
+    mainwindow.ui \
+    vareditor.ui
 
 
 LIBS += -lws2_32

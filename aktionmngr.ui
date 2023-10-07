@@ -164,7 +164,15 @@
          <string>Mausposition</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Variable</string>
+        </property>
+       </item>
       </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="lineEdit_bedinungsinput_anfang"/>
      </item>
     </layout>
    </item>

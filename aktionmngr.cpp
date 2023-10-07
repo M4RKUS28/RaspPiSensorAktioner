@@ -2,8 +2,8 @@
 #include "ui_aktionmngr.h"
 
 
-AktionMngr::AktionMngr(QWidget *parent, PiManager *piMngr, QString id)
-    :  QDialog(parent),  ui(new Ui::AktionMngr)
+AktionMngr::AktionMngr(QWidget *parent, PiManager *piMngr, QString id, QMap<QString, QString> *gVars)
+    :  QDialog(parent),  ui(new Ui::AktionMngr), gVarsPrivate(gVars)
 {
     ui->setupUi(this);
     mThread = new AktionExecuterThread(this, piMngr);
@@ -11,8 +11,8 @@ AktionMngr::AktionMngr(QWidget *parent, PiManager *piMngr, QString id)
     this->id = id;
 }
 
-AktionMngr::AktionMngr(QWidget *parent, PiManager *piMngr, const AKTIONMNGR_DATA &initData)
-    :  QDialog(parent),   ui(new Ui::AktionMngr)
+AktionMngr::AktionMngr(QWidget *parent, PiManager *piMngr, const AKTIONMNGR_DATA &initData, QMap<QString, QString> *gVars)
+    :  QDialog(parent),   ui(new Ui::AktionMngr), gVarsPrivate(gVars)
 {
     ui->setupUi(this);
     mThread = new AktionExecuterThread(this, piMngr);
@@ -236,6 +236,9 @@ QString AktionMngr::getListName(AKTION action)
                                               :   ( action.reCheckCondition.effekt == action.reCheckCondition.STOP_PROGRAMM ? "Wenn erfüllt, beende das Programm"
                                               : "Wenn erfüllt, brich die Sequenz ab"  )   );
         break;
+    case AKTION::EDIT_VAR:
+        name =  "[ Lege Variablenwert fest ]: Speichere in "  + QString( action.editVar.getName() ) + ": [" + action.editVar.getNewValue() + "]"  ;
+        break;
     default:
         name =  "[ Unbekannte Aktion ]: " "ID: " + QString::number(action.type);
         break;
@@ -297,24 +300,28 @@ bool AktionExecuterThread::isDisabled() const
 bool AktionExecuterThread::startSequenz()
 {
     //ALLES ÄNDERN ZU 1 NER BOX!!!!
+    QString bt1 = aktionMngr->ui->comboBoxBed1->currentText(),
+            bt2 = aktionMngr->ui->comboBox_Bed2->currentText(),
+            bt3 = aktionMngr->ui->comboBox_Bed_3->currentText();
+
     if( aktionMngr->ui->comboBoxBed1->currentIndex() == 0 )
         return false;
-    else if( aktionMngr->ui->comboBoxBed1->currentText() == "Bedingung immer erfüllt")
+
+    else if( bt1 == "Bedingung immer erfüllt")
         return true;
-    else if ( aktionMngr->ui->comboBoxBed1->currentText() == "Error"  ) {
-        if( ( aktionMngr->ui->comboBox_Bed2->currentText() == "ist/sind" && aktionMngr->ui->comboBox_Bed_3->currentText() == "verbundener Pi")
-            ||  (aktionMngr->ui->comboBox_Bed2->currentText() == "ist/sind nicht" && aktionMngr->ui->comboBox_Bed_3->currentText() == "verbundener Pi") ) {
+    else if ( bt1 == "Error"  ) {
+        if( ( bt2 == "ist/sind" && bt3 == "verbundener Pi") ||  (bt2 == "ist/sind nicht" && bt3 == "verbundener Pi") ) {
 
         }
-         if( piMngr->isConnected() && ( aktionMngr->ui->comboBox_Bed2->currentText() == "ist/sind" && aktionMngr->ui->comboBox_Bed_3->currentText() == "verbundener Pi") ) {
+         if( piMngr->isConnected() && ( bt2 == "ist/sind" && bt3 == "verbundener Pi") ) {
              return true;
          }
-         if(  ! piMngr->isConnected() && ( aktionMngr->ui->comboBox_Bed2->currentText() == "ist/sind nicht" && aktionMngr->ui->comboBox_Bed_3->currentText() == "verbundener Pi") ) {
+         if(  ! piMngr->isConnected() && ( bt2 == "ist/sind nicht" && bt3 == "verbundener Pi") ) {
              return true;
          }
 
 
-    } else if ( aktionMngr->ui->comboBoxBed1->currentText() == "Mausposition" ) {
+    } else if ( bt1 == "Mausposition" ) {
 
         auto l = aktionMngr->ui->lineEdit_BedInput->text().split(',');
         auto pos = winMngr->getGlobalMousePos();
@@ -324,15 +331,14 @@ bool AktionExecuterThread::startSequenz()
         int x = l.at(0).toInt();
         int y = l.at(1).toInt();
 
-        if(aktionMngr->ui->comboBox_Bed2->currentText() == "ist/sind kleiner" && pos.x() < x && pos.y() < y )
+        if(bt2 == "ist/sind kleiner" && pos.x() < x && pos.y() < y )
             return true ;
-        else if( aktionMngr->ui->comboBox_Bed2->currentText() == "ist/sind größer" && pos.x() > x && pos.y() > y  )
+        else if( bt2 == "ist/sind größer" && pos.x() > x && pos.y() > y  )
             return true;
 
-    } else if ( aktionMngr->ui->comboBoxBed1->currentText() == "Tür" ) {
+    } else if ( bt1 == "Tür" ) {
         bool tuersollOffenSein;
-        if( (aktionMngr->ui->comboBox_Bed2->currentText() == "ist/sind" && aktionMngr->ui->comboBox_Bed_3->currentText() == "offen")
-            ||  (aktionMngr->ui->comboBox_Bed2->currentText() == "ist/sind nicht" && aktionMngr->ui->comboBox_Bed_3->currentText() == "geschlossen") )
+        if( (bt2 == "ist/sind" && bt3 == "offen") ||  (bt2 == "ist/sind nicht" && bt3 == "geschlossen") )
             tuersollOffenSein = true;
         else
             tuersollOffenSein = false;
@@ -347,7 +353,14 @@ bool AktionExecuterThread::startSequenz()
             return true;
 
 
+    } else if( bt1 == "Variable") {
+        if( aktionMngr->getgVarListCopy()[ aktionMngr->ui->lineEdit_bedinungsinput_anfang->text() ] == aktionMngr->ui->lineEdit_BedInput->text() )
+            return true;
+
+
+
     }
+
     return false;
 }
 
@@ -359,6 +372,7 @@ void AktionExecuterThread::run()
 {
     int execCount = 0;
     auto & ui = aktionMngr->ui;
+    bool break_var = false;
 
     while ( ! this->isInterruptionRequested() ) {
         usleep ( aktionMngr->ui->spinBox_aktualisierungsrate->value() * 1000 );
@@ -373,55 +387,161 @@ void AktionExecuterThread::run()
         }
         if( (ui->spinBox_anzahl_ausfuehrungen->value() != 0) && execCount >= ui->spinBox_anzahl_ausfuehrungen->value()) {
             std::cout << " Maximal ausführungen erreicht " << std::endl;
+            this->waitUGoOn();
+            execCount = 0;
             continue;
         }
         else
             execCount++;
 
-        for ( auto &action : aktionMngr->aktionList ) {
+        for ( auto &a : aktionMngr->aktionList ) {
              if( this->waitugoon || this->isdisabled )
                 break;
 
-             if(action.type == action.SLEEP) {
-                std::cout << "SLEEP..." << std::endl;
-                sleep( action.sleep.sleep_time_minuten * 60 );
-                sleep( action.sleep.sleep_time_sekunden );
+             //EXECUTE AKTION....
+             switch (a.type) {
+             case AKTION::SLEEP:
+             {
+                 std::cout << "SLEEP..." << std::endl;
+                 sleep( a.sleep.sleep_time_minuten * 60 );
+                 sleep( a.sleep.sleep_time_sekunden );
+                 usleep( a.sleep.sleep_time_m_sec * 1000 );
+                 break;
+             }
+             case AKTION::WINDOW_CHANCHE_POS:
+             {
+                 std::cout << "move..." << std::endl;
+                 winMngr->moveWindow( a.moveWindow );
+                 break;
 
-            } else if( action.type == action.WINDOW_CHANCHE_POS ) {
-                 winMngr->moveWindow( action.moveWindow );
-                std::cout << "MOVED" << std::endl;
+             }
+             case AKTION::WINDOW_CHANCHE_VISIBILITY:
+             {
+                 std::cout << "make (in)visible a window..." << std::endl;
+                 winMngr->changeWindowVisibility( a.changeWVisibility );
+                 break;
 
-            } else if ( action.type == action.WINDOW_CHANCHE_VISIBILITY ) {
-                std::cout << "make (in)visible a window..." << std::endl;
-                winMngr->changeWindowVisibility( action.changeWVisibility );
+             }
+             case AKTION::RECHECK_CONDITION :
+             {
+                 std::cout << "RECHECK_CONDITION..." << std::endl;
+                 if( ! startSequenz() )
+                     break_var = true;
+                 break;
 
+             }
+             case AKTION::EDIT_VAR :
+             {
+                 std::cout << "editVar..." << a.editVar.newValue.toStdString()  <<  " --- " <<  aktionMngr->replaceVars( a.editVar.newValue ).toStdString() << std::endl;
+                 emit aktionMngr->wantchangeVarValue( a.editVar.name, aktionMngr->replaceVars( a.editVar.newValue )  );
+                 //if(a.editVar.name != "")
+                 //   aktionMngr->gVarsPrivate->insert( a.editVar.name, aktionMngr->replaceVars( a.editVar.newValue ) );
+                 break;
 
-            } else if ( action.type == action.RECHECK_CONDITION ) {
-                std::cout << "RECHECK_CONDITION..." << std::endl;
-                if( ! startSequenz() ) {
-                    break;
+             }
+             case AKTION::SHOW_MSG :
+             {
+                 std::cout << "showMsg...: " << a.showMsg.getMsg().toStdString() << std::endl;
+                 emit aktionMngr->wandCreateMsgBox(MSG_TYPE::information,  aktionMngr->replaceVars( AKTION::getString(a.showMsg.title) ),  aktionMngr->replaceVars( a.showMsg.getMsg() ) );
+                 break;
+             }
+             case AKTION::SOUND_MUTE :
+             {
+                 std::cout << winMngr->getCurrenSoundVolume() << std::endl;
+                 break;
+             }
+             case AKTION::TYPE::EMPTY :
+             {
+                 break;
+             }
+             case AKTION::TYPE::RUN_COMMAND :
+             {
+                QString retVal = winMngr->runCommand(this,  aktionMngr->replaceVars( a.runCommand.getCommand() ) );
+                std::cout << "GOT: " << retVal.toStdString() << std::endl;
+                if(a.runCommand.saveVar) {
+                    //if(a.editVar.name != "")
+                    //   aktionMngr->gVarsPrivate->insert( a.editVar.name, aktionMngr->replaceVars( a.editVar.newValue ) );
+                    emit aktionMngr->wantchangeVarValue( AKTION::getString(a.runCommand.saveInVarName), retVal  );
                 }
+                break;
+             }
+             case AKTION::TYPE::GLOBAL_VAR :
+             {
+                 //ERROR EIGENTLICH                 //speichere trotzdem Wert
+                 emit aktionMngr->wantchangeVarValue( a.globalVar.getName(), aktionMngr->replaceVars( a.globalVar.getValue() )  );
+                 break;
+             }
+//             case AKTION:: :
+//             {
+//                 break;
+//             }
+//             case AKTION:: :
+//             {
+
+//                 break;
+//             }
+             default:
+             {
+                 //UNKNOWN TYPE -> SKIP
+                 break;
+             }
+             } // SWITCH
+
+             if(break_var)
+                 break;
+        } //AKTION LIST LOOP
 
 
-            } else if ( action.type == action.SHOW_MSG ) {
-                std::cout << "showMsg...: " << action.showMsg.getMsg().toStdString() << std::endl;
-                emit aktionMngr->wandCreateMsgBox(MSG_TYPE::information, action.showMsg.getMsg(), action.showMsg.getMsg() );
-
-            }
-
-
-
-        }
-
-
-    }
+    }//Thread while true loop
 }
 
 
 
 
 
-void AktionMngr::on_label_5_linkHovered(const QString &link)
+
+
+void AktionMngr::on_comboBoxBed1_currentTextChanged(const QString &arg1)
 {
 
 }
+
+
+void AktionMngr::on_comboBox_Bed2_currentTextChanged(const QString &arg1)
+{
+
+}
+
+
+void AktionMngr::on_comboBox_Bed_3_currentTextChanged(const QString &arg1)
+{
+
+}
+
+#include <iostream>
+
+
+QString AktionMngr::replaceVars(QString s)
+{
+    int p1 = 0, p2 = 0;
+    QString var;
+
+    for(p1 = s.indexOf( "%" ); p1 != -1; p1 = s.indexOf( "%", p2 +1 )) {
+        if( (  p2 =  s.indexOf( "%", p1 + 1 ) ) == -1 )
+            break;
+        else if ( (var = s.mid(p1 + 1, p2 - p1 - 1 )) == "" )
+            continue;
+        else if( getgVarListCopy().contains( var )  )
+            s.replace( "%" + var + "%",  getgVarListCopy()[var] );
+        else {
+            //UNKNOWN VAR!
+        }
+    }
+    return s;
+}
+
+const QMap<QString, QString> &AktionMngr::getgVarListCopy() const
+{
+    return *gVarsPrivate;
+}
+

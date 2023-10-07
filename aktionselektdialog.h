@@ -30,6 +30,9 @@ private slots:
 
     void on_radioButton_aktiviereVollbild_clicked();
 
+
+    void on_radioButton_saveRUNCOMMOUTPUT_clicked(bool checked);
+
 private:
 
 };

@@ -334,8 +334,15 @@
      <addaction name="separator"/>
      <addaction name="actionNeue_Addresse_festlegen"/>
     </widget>
+    <widget class="QMenu" name="menuVariablen">
+     <property name="title">
+      <string>Variablen</string>
+     </property>
+     <addaction name="actionAnzeigen"/>
+    </widget>
     <addaction name="menuAutostart"/>
     <addaction name="menuPi_Addresse"/>
+    <addaction name="menuVariablen"/>
    </widget>
    <addaction name="menuEinstellungen"/>
   </widget>
@@ -361,6 +368,11 @@
   <action name="actionNeue_Addresse_festlegen">
    <property name="text">
     <string>Neue Addresse festlegen</string>
+   </property>
+  </action>
+  <action name="actionAnzeigen">
+   <property name="text">
+    <string>Anzeigen</string>
    </property>
   </action>
  </widget>

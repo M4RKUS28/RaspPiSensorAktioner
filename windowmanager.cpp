@@ -207,5 +207,67 @@ MyRect WindowManager::getFullScreenRect(int screen)
 }
 
 
+std::string exec(const char* cmd) {
+    char buffer[128];
+    std::string result = "";
+    FILE* pipe = popen(cmd, "r");
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    try {
+        while (fgets(buffer, sizeof buffer, pipe) != NULL) {
+            result += buffer;
+        }
+    } catch (...) {
+        pclose(pipe);
+        throw;
+    }
+    pclose(pipe);
+    return result;
+}
+
+
+QString WindowManager::runCommand(QObject * p, QString command, int maxWaitTime )
+{
+    QString cmd = command.left( command.indexOf(" ") );
+    QString args = command.mid( command.indexOf(" ") + 1, -1 );
+    auto l = args.split(' ');
+    std::cout << "cmd: '" << cmd.toStdString() << "' args '" << args.toStdString() << "'" << std::endl;
+
+   return QString::fromStdString( exec( command.toStdString().c_str() ) );
+
+
+}
+
+
+unsigned long WindowManager::getCurrenSoundVolume()
+{
+
+
+}
+
+void WindowManager::setSoundVolume(float fLevel)
+{/*
+    CoInitializeEx(NULL, COINIT_MULTITHREADED);
+
+    IMMDeviceEnumerator *deviceEnumerator = NULL;
+    auto hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER, __uuidof(IMMDeviceEnumerator), (LPVOID *)&deviceEnumerator);
+
+    IMMDevice *defaultDevice = NULL;
+    hr = deviceEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &defaultDevice);
+    deviceEnumerator->Release();
+    deviceEnumerator = NULL;
+
+    IAudioEndpointVolume *endpointVolume = NULL;
+    hr = defaultDevice->Activate(__uuidof(IAudioEndpointVolume), CLSCTX_INPROC_SERVER, NULL, (LPVOID *)&endpointVolume);
+    defaultDevice->Release();
+    defaultDevice = NULL;
+
+    float currentVolume = 0;
+
+    endpointVolume->GetMasterVolumeLevel( &currentVolume );
+
+    hr = endpointVolume->SetMasterVolumeLevel((float)currentVolume / 2.0, NULL);*/
+}
+
+
 
 

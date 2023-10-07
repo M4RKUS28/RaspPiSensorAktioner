@@ -17,6 +17,35 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
+   <item row="3" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>1</height>
+      </size>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QComboBox" name="comboBox_select_Aktion">
      <item>
@@ -74,6 +103,16 @@
        <string>Bedingsüberprüfung</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Sende TCP Nachricht</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Variablen</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="1" column="0">
@@ -85,7 +124,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="page_0_empty"/>
      <widget class="QWidget" name="page_1_Sleep">
@@ -286,6 +325,35 @@
        <item row="0" column="1">
         <widget class="QLineEdit" name="lineEdit_command"/>
        </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QRadioButton" name="radioButton_saveRUNCOMMOUTPUT">
+         <property name="text">
+          <string>Ausgabe speichern?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_run_command_ausgabespeichern">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>---------------</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_17">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Variablenname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_RUNCOMMANDVARNAME"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_4_window_sichtbarkeit_veraendern">
@@ -427,20 +495,13 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page_5_sound_mute">
-      <layout class="QFormLayout" name="formLayout_6">
-       <item row="0" column="0" colspan="2">
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLabel" name="label_9">
+          <widget class="QRadioButton" name="radioButton_2">
            <property name="text">
-            <string>Mute Status:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="radioButton_mute_system_mute_rad_button">
-           <property name="text">
-            <string>Mute System</string>
+            <string>Lautstärke speichern</string>
            </property>
            <property name="checked">
             <bool>true</bool>
@@ -448,13 +509,84 @@
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_mute_system_unmute_rad_button">
+          <widget class="QRadioButton" name="radioButton_3">
            <property name="text">
-            <string>Unmute System</string>
+            <string>Lautstärke festlegen</string>
            </property>
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>-----------</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_18">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Variablenname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_6"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>-------------</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_6">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="radioButton_4">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>RadioButton</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSlider" name="horizontalSlider">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="radioButton_5">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>RadioButton</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_7">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -495,7 +627,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="4" column="1">
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -507,6 +639,13 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLabel" name="label_28">
+           <property name="text">
+            <string>Eigentlich Überflüssig -&gt; Jetzt Check Condition</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -1220,21 +1359,14 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_8_checkCondition">
+     <widget class="QWidget" name="page_8_mouse_move"/>
+     <widget class="QWidget" name="page_9_shutdown_pc"/>
+     <widget class="QWidget" name="page_10_checkCondition">
       <layout class="QGridLayout" name="gridLayout_6">
-       <item row="0" column="1">
-        <widget class="QComboBox" name="comboBox_3"/>
-       </item>
        <item row="0" column="0">
         <widget class="QComboBox" name="comboBox_2"/>
        </item>
-       <item row="0" column="2">
-        <widget class="QComboBox" name="comboBox_4"/>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLineEdit" name="lineEdit"/>
-       </item>
-       <item row="1" column="2">
+       <item row="2" column="2">
         <spacer name="verticalSpacer_11">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -1247,39 +1379,162 @@
          </property>
         </spacer>
        </item>
+       <item row="0" column="2">
+        <widget class="QComboBox" name="comboBox_4"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBox_3"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>Mit Überpringen komplett abbrechen programm beenden etc</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_9"/>
-     <widget class="QWidget" name="page_10"/>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>1</height>
-      </size>
-     </property>
-     <property name="title">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
+     <widget class="QWidget" name="page_11_tcp_sendMSg">
+      <layout class="QFormLayout" name="formLayout_14">
+       <item row="0" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <layout class="QFormLayout" name="formLayout_12">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>Ip</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_2"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QFormLayout" name="formLayout_13">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_17">
+             <property name="text">
+              <string>Port</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="spinBox">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>6400</number>
+             </property>
+             <property name="value">
+              <number>2001</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Message</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_3"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>TCP Connection Timeout</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_4"/>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QRadioButton" name="radioButton">
+         <property name="text">
+          <string>Antwort abfragen?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>-------------</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_15">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>Max Timeout:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinBox_2"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>Antwort speichern in:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_5"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_12_Variablen">
+      <layout class="QFormLayout" name="formLayout_16">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_25">
+         <property name="text">
+          <string>VariablenName</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_10_varName"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>Neuer Wert</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_10_newValue"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_5"/>
+     <widget class="QWidget" name="page_4"/>
+     <widget class="QWidget" name="page_3"/>
     </widget>
    </item>
   </layout>
